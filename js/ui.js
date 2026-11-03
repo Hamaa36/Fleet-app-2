@@ -1,5 +1,5 @@
 // Shared UI helpers: escaping, toast, modal, form fields, validation,
-// multiple-destination editor and HRID / non-HRID passenger editor.
+// destinations editor, HRID / non-HRID passenger editor, items editor and signatures.
 import { icon } from "./icons.js";
 import { SignaturePad } from "./signature.js";
 import { fmtDateTime } from "./schedule.js";
@@ -14,7 +14,7 @@ export function toast(msg) {
   const el = document.getElementById("toast");
   el.innerHTML = `<div class="t">${esc(msg)}</div>`;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (el.innerHTML = ""), 3200);
+  toastTimer = setTimeout(() => (el.innerHTML = ""), 3500);
 }
 export function modal(html, onMount) {
   const bg = document.createElement("div");
@@ -48,7 +48,7 @@ export function validate(form, extra = () => ({})) {
   form.querySelectorAll(".err-text").forEach((e) => (e.textContent = ""));
   form.querySelectorAll(".invalid").forEach((e) => e.classList.remove("invalid"));
   const errs = {};
-  form.querySelectorAll("[required]").forEach((el) => { if (el.name && el.type !== "checkbox" && !String(el.value).trim()) errs[el.name] = "This field is required"; });
+  form.querySelectorAll("[required]").forEach((el) => { if (el.name && el.type !== "checkbox" && !el.closest("[hidden]") && !String(el.value).trim()) errs[el.name] = "This field is required"; });
   Object.assign(errs, extra(readForm(form)));
   for (const [k, msg] of Object.entries(errs)) {
     form.querySelector(`[name="${k}"]`)?.classList.add("invalid");
@@ -59,7 +59,14 @@ export function validate(form, extra = () => ({})) {
   first?.scrollIntoView({ behavior: "smooth", block: "center" });
   return Object.keys(errs).length === 0;
 }
-export const badge = (status) => `<span class="badge b-${esc(status)}">${esc(status.charAt(0).toUpperCase() + status.slice(1))}</span>`;
+
+const STATUS_LABEL = {
+  pending: "Pending", approved: "Approved", rejected: "Rejected", cancelled: "Cancelled", completed: "Completed",
+  delivered: "Awaiting signature", draft: "Draft", submitted: "Submitted", open: "Open", resolved: "Resolved",
+  minor: "Minor", major: "Major", unsafe: "Unsafe",
+};
+export const statusLabel = (s) => STATUS_LABEL[s] || String(s || "");
+export const badge = (status) => `<span class="badge b-${esc(status)}">${esc(statusLabel(status))}</span>`;
 
 export function getGPS() {
   return new Promise((res) => {
@@ -73,8 +80,8 @@ export const gpsText = (g) => (g ? `<a href="https://maps.google.com/?q=${g.lat}
 export const MAX_STOPS = 10;
 export const cleanStops = (stops) => stops.map((s) => String(s || "").trim()).filter(Boolean);
 
-/** Editable list of destinations. Mutates `stops` (array of strings). */
-export function stopsEditor(box, stops) {
+/** Editable list of destinations. Mutates `stops`. onRemove(index) / onChange() let callers keep related data in sync. */
+export function stopsEditor(box, stops, { onRemove = () => {}, onChange = () => {} } = {}) {
   if (!stops.length) stops.push("");
   const draw = () => {
     box.innerHTML = stops.map((s, i) => `
@@ -84,17 +91,20 @@ export function stopsEditor(box, stops) {
         ${stops.length > 1 ? `<button type="button" class="btn btn-danger btn-icon" data-rm="${i}" aria-label="Remove destination ${i + 1}">${icon("x")}</button>` : ""}
       </div>`).join("")
       + (stops.length < MAX_STOPS ? `<button type="button" class="btn btn-outline btn-sm stop-add" data-add>${icon("plus")} Add another destination</button>` : `<p class="small muted stop-add">Maximum ${MAX_STOPS} destinations.</p>`);
-    box.querySelectorAll("input[data-i]").forEach((inp) => inp.addEventListener("input", () => (stops[+inp.dataset.i] = inp.value)));
-    box.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { stops.splice(+b.dataset.rm, 1); draw(); }));
-    box.querySelector("[data-add]")?.addEventListener("click", () => { stops.push(""); draw(); box.querySelectorAll("input[data-i]")[stops.length - 1].focus(); });
+    box.querySelectorAll("input[data-i]").forEach((inp) => inp.addEventListener("input", () => { stops[+inp.dataset.i] = inp.value; onChange(); }));
+    box.querySelectorAll("[data-rm]").forEach((b) => b.addEventListener("click", () => { const i = +b.dataset.rm; stops.splice(i, 1); onRemove(i); draw(); onChange(); }));
+    box.querySelector("[data-add]")?.addEventListener("click", () => { stops.push(""); draw(); onChange(); box.querySelectorAll("input[data-i]")[stops.length - 1].focus(); });
   };
   draw();
+  return { redraw: draw };
 }
 
-/** Read-only route: pick-up then numbered destinations. */
+/** Read-only route: pick-up then numbered destinations, with recorded times when available. */
 export function routeHTML(r) {
   const stops = r.stops?.length ? r.stops : [r.destination].filter(Boolean);
-  return `<ol class="route"><li><span class="lbl">Pick-up</span>${esc(r.origin)}</li>${stops.map((s, i) => `<li><span class="lbl">${stops.length > 1 ? `Destination ${i + 1}` : "Destination"}</span>${esc(s)}</li>`).join("")}</ol>`;
+  const cps = r.checkpoints || [];
+  const at = (i) => (cps[i]?.at ? `<span class="at">${i === 0 ? "Departed" : "Arrived"} ${esc(fmtDateTime(new Date(cps[i].at)))}</span>` : "");
+  return `<ol class="route"><li><span class="lbl">Pick-up</span>${esc(r.origin)}${at(0)}</li>${stops.map((s, i) => `<li><span class="lbl">${stops.length > 1 ? `Destination ${i + 1}` : "Destination"}</span>${esc(s)}${at(i + 1)}</li>`).join("")}</ol>`;
 }
 
 /* ---------------- passengers ---------------- */
@@ -117,21 +127,26 @@ export function paxErrors(others, all = others) {
   return null;
 }
 
-const paxBadge = (p) => (p.type === "hrid" ? `<span class="badge b-hrid">HRID${p.employee_no ? " #" + esc(p.employee_no) : ""}</span>` : `<span class="badge b-na">Non-HRID${p.organization ? " · " + esc(p.organization) : ""}</span>`);
+export const paxBadge = (p) => (p.type === "hrid" ? `<span class="badge b-hrid">HRID${p.employee_no ? " #" + esc(p.employee_no) : ""}</span>` : `<span class="badge b-na">Non-HRID${p.organization ? " · " + esc(p.organization) : ""}</span>`);
 export function paxListHTML(list) {
-  return list.length ? `<ul class="pax-list">${list.map((p) => `<li>${esc(p.name)} ${paxBadge(p)}</li>`).join("")}</ul>` : "-";
+  return list.length ? `<ul class="pax-list">${list.map((p) => `<li><span data-no-tr>${esc(p.name)}</span> ${paxBadge(p)}</li>`).join("")}</ul>` : "-";
 }
-export { paxBadge };
 
-export function collectSignature(p, done) {
-  if (!String(p.name || "").trim()) { toast("Select or enter the passenger first"); return; }
-  modal(`<h2 style="margin-bottom:4px">Passenger signature</h2><p class="muted small" style="margin-bottom:12px">${esc(p.name)} – sign inside the box with a finger or stylus.</p>
+/** Signature modal. onSave(dataUrl). */
+export function signatureModal(title, subtitle, onSave) {
+  modal(`<h2 style="margin-bottom:4px">${esc(title)}</h2><p class="muted small" style="margin-bottom:12px">${esc(subtitle)}</p>
     <canvas class="sig-canvas"></canvas><div class="grid two" style="margin-top:12px"><button class="btn btn-outline" type="button" data-clear>Clear</button><button class="btn btn-primary" type="button" data-save disabled>Save signature</button></div>
     <button class="btn btn-outline btn-block" type="button" data-close style="margin-top:8px">Cancel</button>`, (bg, close) => {
     const save = bg.querySelector("[data-save]");
     const pad = new SignaturePad(bg.querySelector("canvas"), () => (save.disabled = pad.isEmpty()));
     bg.querySelector("[data-clear]").addEventListener("click", () => { pad.clear(); save.disabled = true; });
-    save.addEventListener("click", () => { p.signature = pad.toDataURL(); p.signed_at = new Date().toISOString(); close(); done(); toast("Signature saved"); });
+    save.addEventListener("click", async () => { save.disabled = true; await onSave(pad.toDataURL()); close(); });
+  });
+}
+export function collectSignature(p, done) {
+  if (!String(p.name || "").trim()) { toast("Select or enter the passenger first"); return; }
+  signatureModal("Passenger signature", `${p.name} – sign inside the box with a finger or stylus.`, (img) => {
+    p.signature = img; p.signed_at = new Date().toISOString(); done(); toast("Signature saved");
   });
 }
 
@@ -183,18 +198,67 @@ export function passengerEditor(box, list, { employees = [], allowHRID = true, s
   return { redraw: draw };
 }
 
+/* ---------------- documents & items ---------------- */
+export const newItem = () => ({ id: uid(), description: "", quantity: 1 });
+export const cleanItems = (items) => items.map((i) => ({ id: i.id || uid(), description: String(i.description || "").trim(), quantity: Math.max(1, parseInt(i.quantity, 10) || 1) })).filter((i) => i.description);
+export function itemsErrors(items) {
+  for (const [n, it] of items.entries()) {
+    if (!String(it.description || "").trim()) return `Item ${n + 1}: enter a description (or remove the empty item)`;
+    const q = Number(it.quantity);
+    if (!Number.isInteger(q) || q < 1 || q > 999) return `Item ${n + 1}: quantity must be 1–999`;
+  }
+  if (!items.length) return "Add at least one item";
+  return null;
+}
+export function itemsListHTML(items = []) {
+  return items.length ? `<ul class="pax-list">${items.map((i) => `<li>${icon("box")} <span data-no-tr>${esc(i.description)}</span> <span class="badge b-na">× ${esc(i.quantity)}</span></li>`).join("")}</ul>` : "-";
+}
+export function itemsEditor(box, items, { onChange = () => {} } = {}) {
+  if (!items.length) items.push(newItem());
+  const draw = () => {
+    box.innerHTML = `<div class="item-row small muted" aria-hidden="true"><span>Description</span><span>Quantity</span><span></span></div>`
+      + items.map((it, i) => `<div class="item-row" data-i="${i}">
+        <input class="input" data-f="description" value="${esc(it.description)}" placeholder="e.g. Signed contracts (envelope)" aria-label="Item ${i + 1} description" autocomplete="off" />
+        <input class="input" data-f="quantity" type="number" min="1" max="999" inputmode="numeric" value="${esc(it.quantity)}" aria-label="Item ${i + 1} quantity" />
+        ${items.length > 1 ? `<button type="button" class="btn btn-danger btn-icon" data-rm aria-label="Remove item ${i + 1}">${icon("x")}</button>` : "<span></span>"}
+      </div>`).join("")
+      + `<button type="button" class="btn btn-outline btn-sm stop-add" data-add>${icon("plus")} Add item</button>`;
+    box.querySelectorAll(".item-row[data-i]").forEach((row) => {
+      const it = items[+row.dataset.i];
+      row.querySelectorAll("[data-f]").forEach((inp) => inp.addEventListener("input", () => { it[inp.dataset.f] = inp.value; onChange(); }));
+      row.querySelector("[data-rm]")?.addEventListener("click", () => { items.splice(items.indexOf(it), 1); draw(); onChange(); });
+    });
+    box.querySelector("[data-add]").addEventListener("click", () => { items.push(newItem()); draw(); onChange(); box.querySelectorAll('[data-f="description"]')[items.length - 1].focus(); });
+  };
+  draw();
+}
+
+/* ---------------- downloads ---------------- */
+/** Download rows as a UTF-8 CSV that Excel opens correctly (also with Kurdish text). */
+export function downloadCSV(filename, header, rows) {
+  const cell = (v) => {
+    const s = v == null ? "" : String(v).replace(/[\u2066-\u2069]/g, "");
+    return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const text = "\uFEFF" + [header, ...rows].map((r) => r.map(cell).join(",")).join("\r\n");
+  const url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: filename });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
 // Clear a field's error message as soon as the user edits it.
 const clearErr = (e) => {
   const t = e.target;
   if (!(t instanceof Element)) return;
+  const form = t.closest("form");
   if (t.name) {
     t.classList.remove("invalid");
-    const form = t.closest("form");
     const m = form?.querySelector(`[data-err="${t.name}"]`);
     if (m) m.textContent = "";
   }
-  const scoped = t.closest("#stops") ? "stops" : t.closest("#pax") ? "passengers" : null;
-  if (scoped) { const m = t.closest("form")?.querySelector(`[data-err="${scoped}"]`); if (m) m.textContent = ""; }
+  const scoped = t.closest("#stops") ? "stops" : t.closest("#pax") ? "passengers" : t.closest("#items") ? "items" : null;
+  if (scoped) { const m = form?.querySelector(`[data-err="${scoped}"]`); if (m) m.textContent = ""; }
 };
 document.addEventListener("input", clearErr);
 document.addEventListener("change", clearErr);

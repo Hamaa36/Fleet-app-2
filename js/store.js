@@ -19,12 +19,18 @@ const base = (cfg.SUPABASE_URL || "").replace(/\/$/, "") + "/rest/v1/";
 const headers = { apikey: cfg.SUPABASE_ANON_KEY, Authorization: `Bearer ${cfg.SUPABASE_ANON_KEY}`, "Content-Type": "application/json" };
 async function req(path, opts = {}) {
   const r = await fetch(base + path, { ...opts, headers: { ...headers, ...(opts.headers || {}) } });
-  if (!r.ok) throw new Error(`Database error ${r.status}: ${await r.text()}`);
-  return r.status === 204 || r.status === 201 ? null : r.json();
+  if (!r.ok) {
+    const text = await r.text();
+    if (r.status === 404 && /relation|does not exist|Could not find the table/i.test(text)) throw new Error("A database table is missing. Run supabase/schema.sql again in the Supabase SQL Editor.");
+    throw new Error(`Database error ${r.status}: ${text}`);
+  }
+  if (r.status === 204 || r.status === 201) return null;
+  const t = await r.text();
+  return t ? JSON.parse(t) : null;
 }
 const supa = {
-  async list(t) { return (await req(`${t}?select=data`)).map((r) => r.data); },
-  async get(t, id) { const r = await req(`${t}?select=data&id=eq.${encodeURIComponent(id)}`); return r[0]?.data || null; },
+  async list(t) { return ((await req(`${t}?select=data&limit=10000`)) || []).map((r) => r.data); },
+  async get(t, id) { const r = await req(`${t}?select=data&id=eq.${encodeURIComponent(id)}`); return r?.[0]?.data || null; },
   async insert(t, row) { await req(t, { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ id: row.id, data: row }) }); return row; },
   async update(t, id, patch) {
     const cur = await this.get(t, id); if (!cur) throw new Error("Record not found");

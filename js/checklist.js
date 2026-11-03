@@ -12,3 +12,8 @@ export const CHECKLIST = [
     ["service", "Service date / mileage not overdue"], ["clean", "Cleanliness inside & outside"], ["docs", "Registration & insurance documents in vehicle"],
   ]},
 ];
+export const checklistLabel = (key) => CHECKLIST.flatMap((s) => s.items).find(([k]) => k === key)?.[1] || key;
+
+// Categories for problems reported outside the weekly checklist.
+export const ISSUE_CATEGORIES = ["Engine", "Brakes", "Tyres", "Lights & electrical", "Air conditioning", "Body damage / accident", "Warning light", "Other"];
+export const SEVERITIES = [["minor", "Minor – can still be driven"], ["major", "Major – needs repair soon"], ["unsafe", "Unsafe – do not drive"]];

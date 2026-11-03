@@ -1,5 +1,5 @@
-import { IS_KU, kuDate } from "./i18n.js";
 // Weekly inspection schedule – due every Sunday 08:00, Iraq time (Asia/Baghdad, UTC+3, no DST).
+import { IS_KU, kuDate } from "./i18n.js";
 const cfg = window.HRID_CONFIG || {};
 const TZ = cfg.TIMEZONE || "Asia/Baghdad";
 const OFFSET = 3 * 3600e3;
@@ -23,8 +23,17 @@ export function isInspectionDue(lastSubmittedAt, now = new Date()) {
 export function weekKey(now = new Date()) {
   return new Date(getInspectionWindow(now).start.getTime() + OFFSET).toISOString().slice(0, 10);
 }
+/** Iraq-time calendar date (YYYY-MM-DD) of an ISO timestamp. */
+export function localISODate(iso) {
+  return new Date(new Date(iso).getTime() + OFFSET).toISOString().slice(0, 10);
+}
 export function todayISO() {
   return new Date(Date.now() + OFFSET).toISOString().slice(0, 10);
+}
+/** Iraq-time HH:MM of an ISO timestamp. */
+export function fmtTime(iso) {
+  if (!iso) return "-";
+  return new Date(new Date(iso).getTime() + OFFSET).toISOString().slice(11, 16);
 }
 export function fmtDateTime(d) {
   if (IS_KU) {
@@ -38,4 +47,9 @@ export function fmtDate(iso) {
   const [y, m, d] = iso.split("-").map(Number);
   if (IS_KU) return kuDate(y, m, d, new Date(Date.UTC(y, m - 1, d)).getUTCDay());
   return new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", weekday: "short", day: "2-digit", month: "short", year: "numeric" }).format(new Date(Date.UTC(y, m - 1, d)));
+}
+export function fmtMonth(ym) {
+  const [y, m] = ym.split("-").map(Number);
+  if (IS_KU) return `${["کانوونی دووەم", "شوبات", "ئازار", "نیسان", "ئایار", "حوزەیران", "تەمموز", "ئاب", "ئەیلوول", "تشرینی یەکەم", "تشرینی دووەم", "کانوونی یەکەم"][m - 1]} ${y}`;
+  return new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", month: "long", year: "numeric" }).format(new Date(Date.UTC(y, m - 1, 1)));
 }

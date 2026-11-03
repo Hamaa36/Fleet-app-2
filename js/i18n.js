@@ -21,8 +21,11 @@ const KU = {
   "My trips": "گەشتەکانم",
   "All trips": "هەموو گەشتەکان",
   "New trip": "گەشتی نوێ",
+  "Delivery": "گەیاندن",
   "Checklist": "پشکنین",
   "Checklists": "پشکنینەکان",
+  "Vehicles": "ئۆتۆمبێلەکان",
+  "Reports": "ڕاپۆرتەکان",
   "Users": "بەکارهێنەران",
   "Profile": "پرۆفایل",
   "Administrator": "بەڕێوەبەری سیستەم",
@@ -30,6 +33,8 @@ const KU = {
   "Employee": "کارمەند",
   "Guest": "میوان",
   "HRID": "HRID",
+  "Main": "ڕێنیشاندەری سەرەکی",
+  "Language": "زمان",
   "← Back": "→ گەڕانەوە",
   "Back to sign in": "گەڕانەوە بۆ چوونەژوورەوە",
   "Reload": "دووبارە بارکردنەوە",
@@ -37,6 +42,7 @@ const KU = {
   "You do not have access to that page": "دەسەڵاتی چوونە ئەو پەڕەیەت نییە",
   "Demo mode: data is saved only on this device. Connect Supabase in": "دۆخی تاقیکردنەوە: زانیارییەکان تەنها لەسەر ئەم ئامێرە پاشەکەوت دەکرێن. Supabase لە",
   "to share data between phones.": "ببەستەوە بۆ هاوبەشکردنی زانیاری لە نێوان مۆبایلەکاندا.",
+  "A database table is missing. Run supabase/schema.sql again in the Supabase SQL Editor.": "خشتەیەکی بنکەدراوە نییە. فایلی supabase/schema.sql دووبارە لە SQL Editor ی Supabase جێبەجێ بکە.",
 
   // ---- login / setup / password ----
   "First-time setup": "ڕێکخستنی یەکەمجار",
@@ -98,8 +104,9 @@ const KU = {
   "Notes": "تێبینی",
   "Comment": "تێبینی",
   "Location": "شوێن",
-  "Language": "زمان",
-  "Main": "ڕێنیشاندەری سەرەکی",
+  "Total": "کۆ",
+  "Details": "وردەکاری",
+  "Source": "سەرچاوە",
 
   // ---- guest ----
   "Guest trip request": "داواکاری گەشتی میوان",
@@ -116,9 +123,16 @@ const KU = {
   "Your reference number is": "ژمارەی ئاماژەکەت:",
   "Organisation": "ڕێکخراو",
   "HRID contact": "کەسی پەیوەندی لە HRID",
+  "The HRID transport administrators will review your request. They will contact you by phone.": "بەڕێوەبەرانی گواستنەوەی HRID پێداچوونەوە بە داواکارییەکەتدا دەکەن و بە مۆبایل پەیوەندیت پێوە دەکەن.",
 
   // ---- request form ----
   "Request a trip": "داوای گەشت بکە",
+  "What needs to be transported?": "چی دەگوازرێتەوە؟",
+  "Request type": "جۆری داواکاری",
+  "Passengers": "سەرنشینەکان",
+  "People travelling": "ئەو کەسانەی گەشت دەکەن",
+  "Documents & items": "بەڵگەنامە و کەلوپەل",
+  "You sign on your own phone after delivery": "دوای گەیاندن لە مۆبایلی خۆتەوە واژۆ دەکەیت",
   "Route": "ڕێگا",
   "Pick-up location": "شوێنی سوارکردن",
   "Pick-up": "سوارکردن",
@@ -126,6 +140,7 @@ const KU = {
   "Destination": "شوێنی مەبەست",
   "Add another destination": "زیادکردنی شوێنێکی تر",
   "Enter at least one destination": "لانیکەم یەک شوێنی مەبەست بنووسە",
+  "Fill in or remove the empty destination": "شوێنی مەبەستی بەتاڵ پڕ بکەرەوە یان لایبەرە",
   "Date & time": "بەروار و کات",
   "Trip date": "بەرواری گەشت",
   "Departure time": "کاتی ڕۆیشتن",
@@ -133,7 +148,6 @@ const KU = {
   "Return time": "کاتی گەڕانەوە",
   "Date cannot be in the past": "بەروار نابێت ڕابردوو بێت",
   "Must be after departure": "دەبێت دوای کاتی ڕۆیشتن بێت",
-  "Passengers": "سەرنشینەکان",
   "Other passengers": "سەرنشینەکانی تر",
   "I,": "من،",
   ", am a passenger on this trip": "، سەرنشینی ئەم گەشتەم",
@@ -146,6 +160,16 @@ const KU = {
   "No passengers added yet.": "هێشتا هیچ سەرنشینێک زیاد نەکراوە.",
   "Add at least one passenger": "لانیکەم یەک سەرنشین زیاد بکە",
   "Maximum 60 passengers": "زۆرترین 60 سەرنشین",
+  "Description": "وەسف",
+  "Quantity": "ژمارە",
+  "e.g. Signed contracts (envelope)": "بۆ نموونە: گرێبەستی واژۆکراو (زەرف)",
+  "Add item": "زیادکردنی کەلوپەل",
+  "Add at least one item": "لانیکەم یەک کەلوپەل زیاد بکە",
+  "Receiver at destination": "وەرگر لە شوێنی مەبەست",
+  "Receiver phone": "مۆبایلی وەرگر",
+  "Receiver": "وەرگر",
+  "After the driver delivers, you will be asked to confirm and sign on your own phone.": "دوای ئەوەی شۆفێر دەیگەیەنێت، داوات لێدەکرێت لە مۆبایلی خۆتەوە پشتڕاستی بکەیتەوە و واژۆ بکەیت.",
+  "Items": "کەلوپەل",
   "Purpose of trip": "مەبەستی گەشت",
   "Notes for the transport team": "تێبینی بۆ تیمی گواستنەوە",
   "Submit request": "ناردنی داواکاری",
@@ -153,6 +177,7 @@ const KU = {
 
   // ---- request details / lists ----
   "Trip request": "داواکاری گەشت",
+  "Delivery request": "داواکاری گەیاندن",
   "Trip requests": "داواکارییەکانی گەشت",
   "Request details": "وردەکاری داواکاری",
   "Reference": "ژمارەی ئاماژە",
@@ -163,6 +188,8 @@ const KU = {
   "Vehicle": "ئۆتۆمبێل",
   "Reviewed by": "پێداچوونەوە لەلایەن",
   "Submitted": "نێردراو",
+  "Delivered": "گەیەندرا",
+  "Requester signature": "واژۆی داواکار",
   "Cancel request": "هەڵوەشاندنەوەی داواکاری",
   "Cancel this trip request?": "ئەم داواکاری گەشتە هەڵدەوەشێنیتەوە؟",
   "Request cancelled": "داواکاری هەڵوەشێندرایەوە",
@@ -172,6 +199,14 @@ const KU = {
   "Next approved trip": "گەشتی پەسەندکراوی داهاتوو",
   "No upcoming approved trips.": "هیچ گەشتێکی پەسەندکراوی داهاتوو نییە.",
   "New request": "داواکاری نوێ",
+  "No requests here.": "هیچ داواکارییەک لێرە نییە.",
+  "Delivery completed – your signature is needed": "گەیاندن تەواو بوو – واژۆکەت پێویستە",
+  "Confirm & sign": "پشتڕاستکردنەوە و واژۆ",
+  "Your items were delivered": "کەلوپەلەکانت گەیەندران",
+  "Please check and sign to confirm the delivery.": "تکایە بیپشکنە و واژۆ بکە بۆ پشتڕاستکردنەوەی گەیاندنەکە.",
+  "Confirm delivery": "پشتڕاستکردنەوەی گەیاندن",
+  "Thank you – delivery confirmed": "سوپاس – گەیاندن پشتڕاستکرایەوە",
+  "View trip report": "بینینی ڕاپۆرتی گەشت",
 
   // ---- statuses ----
   "Pending": "چاوەڕوان",
@@ -179,10 +214,17 @@ const KU = {
   "Rejected": "ڕەتکراوە",
   "Cancelled": "هەڵوەشێنراوە",
   "Completed": "تەواوبوو",
+  "Awaiting signature": "چاوەڕێی واژۆ",
   "Draft": "ڕەشنووس",
   "All": "هەمووی",
   "Active": "چالاک",
   "Disabled": "ناچالاک",
+  "Open": "کراوە",
+  "Resolved": "چارەسەرکراوە",
+  "Minor": "بچووک",
+  "Major": "گەورە",
+  "Unsafe": "مەترسیدار",
+  "None": "نییە",
 
   // ---- admin review ----
   "Review request": "پێداچوونەوەی داواکاری",
@@ -200,11 +242,13 @@ const KU = {
   "No pending requests.": "هیچ داواکارییەکی چاوەڕوان نییە.",
   "Active drivers": "شۆفێری چالاک",
   "Checklists this week": "پشکنینەکانی ئەم هەفتەیە",
-  "Vehicles with defects": "ئۆتۆمبێلی کەموکوڕیدار",
+  "Open vehicle problems": "کێشە کراوەکانی ئۆتۆمبێل",
+  "No open vehicle problems.": "هیچ کێشەیەکی کراوەی ئۆتۆمبێل نییە.",
   "Weekly checklist status": "دۆخی پشکنینی هەفتانە",
   "No drivers yet. Add them under Users.": "هێشتا هیچ شۆفێرێک نییە. لە بەشی بەکارهێنەران زیادیان بکە.",
   "Defects reported": "کەموکوڕی تۆمارکراوە",
   "Not submitted": "نەنێردراوە",
+  "Monthly reports": "ڕاپۆرتی مانگانە",
 
   // ---- driver / trips ----
   "Weekly vehicle checklist due": "کاتی پشکنینی هەفتانەی ئۆتۆمبێلە",
@@ -229,11 +273,20 @@ const KU = {
   "Odometer reading (km)": "خوێندنەوەی کیلۆمەتر (km)",
   "Odometer": "کیلۆمەتر",
   "Must be greater than the start reading": "دەبێت لە کیلۆمەتری دەستپێک زیاتر بێت",
-  "Capture start GPS": "تۆمارکردنی شوێنی دەستپێک (GPS)",
-  "Capture end GPS": "تۆمارکردنی شوێنی کۆتایی (GPS)",
+  "Arrival times": "کاتەکانی گەیشتن",
+  "Tap each button when you leave the pick-up location and when you arrive at each destination. Time and location are recorded.": "کاتێک لە شوێنی سوارکردن دەڕۆیت و کاتێک دەگەیتە هەر شوێنێکی مەبەست، دوگمەکە دابگرە. کات و شوێن تۆمار دەکرێن.",
+  "Record departure": "تۆمارکردنی ڕۆیشتن",
+  "Record arrival": "تۆمارکردنی گەیشتن",
+  "Record again": "دووبارە تۆمارکردنەوە",
+  "Not recorded yet": "هێشتا تۆمار نەکراوە",
+  "Location not captured": "شوێن تۆمار نەکراوە",
+  "Time and location recorded": "کات و شوێن تۆمارکران",
+  "Time recorded – location unavailable (allow location access)": "کات تۆمارکرا – شوێن بەردەست نییە (ڕێگە بە دەستگەیشتن بە شوێن بدە)",
+  "Record the departure and the arrival at every destination": "ڕۆیشتن و گەیشتن بە هەموو شوێنەکانی مەبەست تۆمار بکە",
+  "Departure": "ڕۆیشتن",
+  "Arrival": "گەیشتن",
   "Not captured": "تۆمار نەکراوە",
   "Locating…": "دۆزینەوەی شوێن…",
-  "Location unavailable – allow location access": "شوێن بەردەست نییە – ڕێگە بە دەستگەیشتن بە شوێن بدە",
   "Passengers & signatures": "سەرنشینان و واژۆکان",
   "Collect signature": "وەرگرتنی واژۆ",
   "Re-sign": "واژۆی دووبارە",
@@ -243,7 +296,10 @@ const KU = {
   "Signature saved": "واژۆ پاشەکەوت کرا",
   "Remove this signed passenger?": "ئەم سەرنشینە واژۆکراوە لادەبەیت؟",
   "Select or enter the passenger first": "سەرەتا سەرنشین هەڵبژێرە یان ناوی بنووسە",
+  "Handed over to (name)": "درا بە (ناو)",
+  "Handed over to": "درا بە",
   "I declare that the trip details above are correct and every passenger signed personally.": "ڕادەگەیەنم کە زانیارییەکانی سەرەوەی گەشت دروستن و هەموو سەرنشینێک خۆی واژۆی کردووە.",
+  "I declare that the trip details above are correct and the items were handed over.": "ڕادەگەیەنم کە زانیارییەکانی سەرەوەی گەشت دروستن و کەلوپەلەکان ڕادەستکران.",
   "Please confirm the driver declaration": "تکایە بەڵێننامەی شۆفێر پشتڕاست بکەرەوە",
   "Every passenger must sign before the trip can be submitted": "پێش ناردنی گەشت دەبێت هەموو سەرنشینان واژۆ بکەن",
   "Save draft": "پاشەکەوتکردن وەک ڕەشنووس",
@@ -257,18 +313,59 @@ const KU = {
   "Export PDF": "دەرهێنان بە PDF",
   "Print / PDF": "چاپکردن / PDF",
   "Distance": "مەودا",
-  "Departure": "ڕۆیشتن",
   "Return": "گەڕانەوە",
-  "Start GPS": "شوێنی دەستپێک",
-  "End GPS": "شوێنی کۆتایی",
   "Declaration": "بەڵێننامە",
   "Confirmed by driver": "لەلایەن شۆفێرەوە پشتڕاستکراوەتەوە",
   "Not confirmed": "پشتڕاست نەکراوەتەوە",
   "Passenger": "سەرنشین",
   "Signature": "واژۆ",
+  "Missing": "نییە",
+  "GPS": "GPS",
+  "Waiting for requester to sign": "چاوەڕێی واژۆی داواکار",
+  "My open problem reports": "ڕاپۆرتە کراوەکانی کێشەکانم",
+
+  // ---- vehicle problems ----
+  "Report vehicle problem": "ڕاپۆرتی کێشەی ئۆتۆمبێل",
+  "Vehicle problem": "کێشەی ئۆتۆمبێل",
+  "Vehicle problems": "کێشەکانی ئۆتۆمبێل",
+  "Use this any time a vehicle has a problem. The administrators are notified immediately.": "هەر کاتێک ئۆتۆمبێلێک کێشەی هەبوو ئەمە بەکاربهێنە. بەڕێوەبەران دەستبەجێ ئاگادار دەکرێنەوە.",
+  "Problem type": "جۆری کێشە",
+  "How serious is it?": "چەند گرنگە؟",
+  "Describe the problem": "کێشەکە ڕوون بکەرەوە",
+  "Send problem report": "ناردنی ڕاپۆرتی کێشە",
+  "Problem reported – the administrators have been notified": "کێشەکە نێردرا – بەڕێوەبەران ئاگادارکرانەوە",
+  "Minor – can still be driven": "بچووک – هێشتا دەتوانرێت لێبخوڕێت",
+  "Major – needs repair soon": "گەورە – بەم زووانە پێویستی بە چاککردنە",
+  "Unsafe – do not drive": "مەترسیدار – لێی مەخوڕە",
+  "Engine": "بزوێنەر (ماتۆڕ)",
+  "Brakes": "بریک",
+  "Tyres": "تایە",
+  "Lights & electrical": "گڵۆپ و کارەبا",
+  "Air conditioning": "سپلیت / فێنککەرەوە",
+  "Body damage / accident": "زیانی لەش / ڕووداو",
+  "Warning light": "گڵۆپی ئاگاداری",
+  "Other": "هیتر",
+  "Weekly checklist": "پشکنینی هەفتانە",
+  "Driver report": "ڕاپۆرتی شۆفێر",
+  "Reported by": "ڕاپۆرتکەر",
+  "Reported": "کاتی ڕاپۆرت",
+  "Severity": "ئاستی مەترسی",
+  "Repair / action taken": "چاککردنەوە / کاری ئەنجامدراو",
+  "Repair / action": "چاککردنەوە / کار",
+  "Mark as resolved": "وەک چارەسەرکراو دیاری بکە",
+  "Problem marked as resolved": "کێشەکە وەک چارەسەرکراو دیاری کرا",
+  "Reopen problem": "کردنەوەی دووبارەی کێشە",
+  "Problem reopened": "کێشەکە دووبارە کرایەوە",
+  "No vehicle problems.": "هیچ کێشەیەکی ئۆتۆمبێل نییە.",
+  "Fleet status": "دۆخی ئۆتۆمبێلەکان",
+  "Checklist this week": "پشکنینی ئەم هەفتەیە",
+  "Open problems": "کێشە کراوەکان",
+  "Checklist history": "مێژووی پشکنینەکان",
+  "Problems found – how serious?": "کێشە دۆزرایەوە – چەند گرنگە؟",
+  "The administrators are notified automatically about every “Needs attention” item.": "بەڕێوەبەران بە شێوەی خۆکار دەربارەی هەموو خاڵێکی «پێویستی بە چاککردنە» ئاگادار دەکرێنەوە.",
+  "Checklist submitted – the administrators have been notified about the problems": "پشکنین نێردرا – بەڕێوەبەران دەربارەی کێشەکان ئاگادارکرانەوە",
 
   // ---- weekly checklist ----
-  "Weekly checklist": "پشکنینی هەفتانە",
   "Weekly checklists": "پشکنینە هەفتانەکان",
   "Complete one safety & maintenance checklist every Sunday at 08:00.": "هەموو یەکشەممەیەک کاتژمێر 08:00 یەک پشکنینی سەلامەتی و چاککردنەوە تەواو بکە.",
   "Additional notes": "تێبینی زیاتر",
@@ -290,10 +387,8 @@ const KU = {
   "Checked": "پشکنراوە",
   "Not checked": "نەپشکنراوە",
   "Plate": "ژمارەی تابلۆ",
-  "History": "مێژوو",
   "No checklists submitted yet.": "هێشتا هیچ پشکنینێک نەنێردراوە.",
   "No drivers": "هیچ شۆفێرێک نییە",
-  "Fleet – this week": "ئۆتۆمبێلەکان – ئەم هەفتەیە",
   "Safety": "سەلامەتی",
   "Maintenance": "چاککردنەوە و چاودێری",
   "Tyres – condition & pressure": "تایەکان – دۆخ و پەستان (با)",
@@ -315,10 +410,42 @@ const KU = {
   "Fuel level": "ئاستی سووتەمەنی",
   "No dashboard warning lights": "هیچ گڵۆپێکی ئاگاداری لەسەر داشبۆرد نییە",
   "No leaks under the vehicle": "هیچ دزەیەک لە ژێر ئۆتۆمبێلەکەدا نییە",
-  "Air conditioning": "سپلیت / فێنککەرەوە",
   "Service date / mileage not overdue": "کاتی سێرڤیس / کیلۆمەتر تێنەپەڕیوە",
   "Cleanliness inside & outside": "پاکوخاوێنی ناوەوە و دەرەوە",
   "Registration & insurance documents in vehicle": "سەنەوی و بەڵگەنامەی بیمە لە ئۆتۆمبێلەکەدایە",
+
+  // ---- monthly reports ----
+  "Month": "مانگ",
+  "Print / Save as PDF": "چاپکردن / پاشەکەوت وەک PDF",
+  "Fleet monthly report": "ڕاپۆرتی مانگانەی ئۆتۆمبێلەکان",
+  "Trips completed": "گەشتی تەواوبوو",
+  "Passengers carried": "سەرنشینی گوازراوە",
+  "Deliveries (documents & items)": "گەیاندن (بەڵگەنامە و کەلوپەل)",
+  "Distance driven": "مەودای لێخوڕین",
+  "Rejected requests": "داواکاری ڕەتکراوە",
+  "Vehicle problems reported": "کێشەی ڕاپۆرتکراوی ئۆتۆمبێل",
+  "Trips per day": "گەشت بەپێی ڕۆژ",
+  "Requests by status": "داواکاری بەپێی دۆخ",
+  "Trip type": "جۆری گەشت",
+  "Distance per vehicle (km)": "مەودا بەپێی ئۆتۆمبێل (کم)",
+  "Distance per vehicle": "مەودا بەپێی ئۆتۆمبێل",
+  "Trips per driver": "گەشت بەپێی شۆفێر",
+  "Vehicle problems per vehicle": "کێشەکان بەپێی ئۆتۆمبێل",
+  "No data for this month.": "هیچ زانیارییەک بۆ ئەم مانگە نییە.",
+  "No vehicle problems reported this month.": "ئەم مانگە هیچ کێشەیەکی ئۆتۆمبێل ڕاپۆرت نەکراوە.",
+  "Vehicle information": "زانیاری ئۆتۆمبێلەکان",
+  "Deliveries": "گەیاندنەکان",
+  "Problems": "کێشەکان",
+  "Current status": "دۆخی ئێستا",
+  "Vehicle problems & defects": "کێشە و کەموکوڕییەکانی ئۆتۆمبێل",
+  "Problem": "کێشە",
+  "Type": "جۆر",
+  "Route & arrival times": "ڕێگا و کاتەکانی گەیشتن",
+  "People / items": "کەس / کەلوپەل",
+  "No completed trips this month.": "ئەم مانگە هیچ گەشتێکی تەواوبوو نییە.",
+  "Raw data export (CSV for Excel)": "دەرهێنانی زانیاری خاو (CSV بۆ Excel)",
+  "Stops & arrival times": "وێستگەکان و کاتەکانی گەیشتن",
+  "Weekly checklists done": "پشکنینی هەفتانەی تەواوکراو",
 
   // ---- users / admin ----
   "Add user": "زیادکردنی بەکارهێنەر",
@@ -349,6 +476,8 @@ const KU = {
   "No recipients with an email address.": "هیچ وەرگرێک ئیمەیڵی نییە.",
   "To:": "بۆ:",
   "Approved / assigned": "پەسەندکراو / دیاریکراو",
+  "Delivery – signature needed": "گەیاندن – واژۆ پێویستە",
+  "Delivery confirmed": "گەیاندن پشتڕاستکرایەوە",
   "demo (not sent)": "تاقیکردنەوە (نەنێردراوە)",
   "queued": "لە ڕیزدایە",
   "sent": "نێردرا",
@@ -363,7 +492,7 @@ const KU = {
 
 const WEEKDAYS = ["یەکشەممە", "دووشەممە", "سێشەممە", "چوارشەممە", "پێنجشەممە", "هەینی", "شەممە"];
 const MONTHS = ["کانوونی دووەم", "شوبات", "ئازار", "نیسان", "ئایار", "حوزەیران", "تەمموز", "ئاب", "ئەیلوول", "تشرینی یەکەم", "تشرینی دووەم", "کانوونی یەکەم"];
-const tabNames = { Pending: "چاوەڕوان", Approved: "پەسەندکراو", Rejected: "ڕەتکراوە", Completed: "تەواوبوو", Cancelled: "هەڵوەشێنراوە", All: "هەمووی", Requests: "داواکارییەکان" };
+const tabNames = { Pending: "چاوەڕوان", Approved: "پەسەندکراو", Rejected: "ڕەتکراوە", Completed: "تەواوبوو", Cancelled: "هەڵوەشێنراوە", All: "هەمووی", Requests: "داواکارییەکان", "Awaiting signature": "چاوەڕێی واژۆ", Open: "کراوە", Resolved: "چارەسەرکراوە" };
 
 // Whole-text patterns (texts that contain names, numbers or dates).
 const PATTERNS = [
@@ -371,12 +500,17 @@ const PATTERNS = [
   [/^Passenger (\d+)$/, (m) => `سەرنشین ${m[1]}`],
   [/^Remove destination (\d+)$/, (m) => `لابردنی شوێنی مەبەست ${m[1]}`],
   [/^Remove passenger (\d+)$/, (m) => `لابردنی سەرنشین ${m[1]}`],
+  [/^Remove item (\d+)$/, (m) => `لابردنی کەلوپەل ${m[1]}`],
+  [/^Item (\d+) (description|quantity)$/, (m) => `${m[2] === "description" ? "وەسفی" : "ژمارەی"} کەلوپەل ${m[1]}`],
+  [/^Item (\d+): enter a description \(or remove the empty item\)$/, (m) => `کەلوپەل ${m[1]}: وەسفێک بنووسە (یان کەلوپەلە بەتاڵەکە لابەرە)`],
+  [/^Item (\d+): quantity must be 1–999$/, (m) => `کەلوپەل ${m[1]}: ژمارە دەبێت لە 1 تا 999 بێت`],
   [/^Passenger (\d+) type$/, (m) => `جۆری سەرنشین ${m[1]}`],
   [/^Passenger (\d+): select the HRID employee \(or remove the empty passenger\)$/, (m) => `سەرنشین ${m[1]}: کارمەندی HRID هەڵبژێرە (یان سەرنشینە بەتاڵەکە لابەرە)`],
   [/^Passenger (\d+): enter the full name \(or remove the empty passenger\)$/, (m) => `سەرنشین ${m[1]}: ناوی تەواو بنووسە (یان سەرنشینە بەتاڵەکە لابەرە)`],
   [/^(.+) is listed more than once$/, (m) => `${m[1]} زیاتر لە جارێک نووسراوە`],
   [/^Signature of (.+)$/, (m) => `واژۆی ${m[1]}`],
   [/^(.+) – sign inside the box with a finger or stylus\.$/, (m) => `${m[1]} – بە پەنجە یان قەڵەم لەناو چوارگۆشەکەدا واژۆ بکە.`],
+  [/^(.+) – sign to confirm the documents\/items were delivered\.$/, (m) => `${m[1]} – واژۆ بکە بۆ پشتڕاستکردنەوەی گەیاندنی بەڵگەنامە/کەلوپەلەکان.`],
   [/^Total passengers: (\d+)$/, (m) => `کۆی سەرنشینان: ${m[1]}`],
   [/^Passengers \((\d+)\)$/, (m) => `سەرنشینەکان (${m[1]})`],
   [/^Maximum (\d+) destinations\.$/, (m) => `زۆرترین ${m[1]} شوێنی مەبەست.`],
@@ -386,23 +520,36 @@ const PATTERNS = [
   [/^Submitted (.+)\. Next due (.+)\.$/, (m) => `نێردرا: ${m[1]}. پشکنینی داهاتوو: ${m[2]}.`],
   [/^Next checklist due (.+)$/, (m) => `پشکنینی داهاتوو: ${m[1]}`],
   [/^Signed (.+)$/, (m) => `واژۆکرا ${m[1]}`],
+  [/^Departed (.+)$/, (m) => `ڕۆیشت ${m[1]}`],
+  [/^Arrived (.+)$/, (m) => `گەیشت ${m[1]}`],
+  [/^Departure from: (.+)$/, (m) => `ڕۆیشتن لە: ${m[1]}`],
+  [/^Arrival at: (.+)$/, (m) => `گەیشتن بە: ${m[1]}`],
+  [/^Arrival (\d*)$/, (m) => `گەیشتن ${m[1]}`],
   [/^Week of (.+)$/, (m) => `هەفتەی ${m[1]}`],
   [/^Checklist – (.+)$/, (m) => `پشکنین – ${tr(m[1])}`],
   [/^Drivers – this week \(from (.+)\)$/, (m) => `شۆفێران – ئەم هەفتەیە (لە ${m[1]}ەوە)`],
   [/^Trip pre-filled from request (.*) by (.+)\.$/, (m) => `گەشتەکە لە داواکاری ${m[1]} ی ${m[2]} پڕکراوەتەوە.`],
   [/^Approved – (.+) and the requester have been emailed$/, (m) => `پەسەندکرا – ئیمەیڵ بۆ ${m[1]} و داواکار نێردرا`],
+  [/^Delivery submitted – (.+) has been asked to sign$/, (m) => `گەیاندن نێردرا – داوا لە ${m[1]} کرا واژۆ بکات`],
+  [/^No passenger signatures are needed\. (.+) will confirm and sign on their own phone after you submit\.$/, (m) => `واژۆی سەرنشین پێویست نییە. ${m[1]} دوای ناردن لە مۆبایلی خۆیەوە پشتڕاستی دەکاتەوە و واژۆ دەکات.`],
   [/^The HRID transport administrators will review your request and email you at (.+)\.$/, (m) => `بەڕێوەبەرانی گواستنەوەی HRID پێداچوونەوە بە داواکارییەکەتدا دەکەن و ئیمەیڵ بۆ ${m[1]} دەنێرن.`],
-  [/^The HRID transport administrators will review your request\. They will contact you by phone\.$/, () => "بەڕێوەبەرانی گواستنەوەی HRID پێداچوونەوە بە داواکارییەکەتدا دەکەن و بە مۆبایل پەیوەندیت پێوە دەکەن."],
   [/^(\d+) of (\d+) users · (\d+) admins · (\d+) drivers$/, (m) => `${m[1]} لە ${m[2]} بەکارهێنەر · ${m[3]} بەڕێوەبەر · ${m[4]} شۆفێر`],
-  [/^No (\w+) requests\.$/, (m) => `هیچ داواکارییەکی ${(tabNames[m[1][0].toUpperCase() + m[1].slice(1)] || m[1])} نییە.`],
-  [/^No\s+requests\.$/, () => "هیچ داواکارییەک نییە."],
-  [/^(Pending|Approved|Rejected|Completed|Cancelled|All|Requests) \((\d+)\)$/, (m) => `${tabNames[m[1]]} (${m[2]})`],
+  [/^(Pending|Approved|Rejected|Completed|Cancelled|All|Requests|Awaiting signature|Open|Resolved) \((\d+)\)$/, (m) => `${tabNames[m[1]]} (${m[2]})`],
+  [/^Handed to (.+)$/, (m) => `درا بە ${m[1]}`],
+  [/^(.+) \((\d+)\)$/, (m) => (Object.prototype.hasOwnProperty.call(KU, m[1]) ? `${KU[m[1]]} (${m[2]})` : null)],
+  [/^(.+):(?: (\d+))?$/, (m) => (Object.prototype.hasOwnProperty.call(KU, m[1]) ? `${KU[m[1]]}:${m[2] ? " " + m[2] : ""}` : null)],
   [/^(\d+) passenger\(s\)$/, (m) => `${m[1]} سەرنشین`],
+  [/^(\d+) item\(s\)$/, (m) => `${m[1]} کەلوپەل`],
   [/^Requested by (.+)$/, (m) => `داواکار: ${m[1]}`],
   [/^By (.+)$/, (m) => `لەلایەن ${m[1]}`],
   [/^Driver: (.+)$/, (m) => `شۆفێر: ${m[1]}`],
+  [/^Delivered (.+?)( · Handed to (.+))?$/, (m) => `گەیەندرا ${m[1]}${m[3] ? ` · درا بە ${m[3]}` : ""}`],
   [/^(.+) already has (\d+) approved trip\(s\) at an overlapping time on this date: (.+)$/, (m) => `${m[1]} لەم بەروارەدا ${m[2]} گەشتی پەسەندکراوی هەیە لە هەمان کاتدا: ${m[3]}`],
   [/^(.+) is already booked at an overlapping time: (.+)$/, (m) => `${tr(m[1])} لە هەمان کاتدا پێشتر گیراوە: ${m[2]}`],
+  [/^(.+) has (\d+) open problem\(s\): (.+)$/, (m) => `${tr(m[1])} ${m[2]} کێشەی کراوەی هەیە: ${m[3]}`],
+  [/^(\d+) unsafe vehicle problem\(s\) reported$/, (m) => `${m[1]} کێشەی مەترسیداری ئۆتۆمبێل ڕاپۆرت کراوە`],
+  [/^Weekly checklists done \((\d+)\/(\d+)\)$/, (m) => `پشکنینی هەفتانەی تەواوکراو (${m[1]}/${m[2]})`],
+  [/^(\d+) row\(s\) exported$/, (m) => `${m[1]} ڕیز دەرهێنرا`],
   [/^(\d+(?:\.\d+)?) km$/, (m) => `${m[1]} کم`],
   [/^Import finished: (\d+) added, (\d+) updated \(existing passwords kept\)(.*)\.$/s, (m) => `هێنان تەواو بوو: ${m[1]} زیادکرا، ${m[2]} نوێکرایەوە (وشە نهێنییەکانی پێشوو ماونەتەوە)${m[3] ? "، " + m[3].replace(/^, (\d+) skipped \(missing name, number or birth date\): /, "$1 تێپەڕێنرا (ناو، ژمارە یان بەرواری لەدایکبوون نییە): ") : ""}.`],
 ];
@@ -411,9 +558,11 @@ const MODELS = ["Toyota Corolla Cross", "Toyota Hilux", "Toyota RAV4", "Nissan P
 const SUBS = [
   [/ → /g, " ← "],
   [/(\d+) passenger\(s\)/g, "$1 سەرنشین"],
+  [/(\d+) item\(s\)/g, "$1 کەلوپەل"],
   [/–\s?return /g, "– گەڕانەوە "],
   [/ km\b/g, " کم"],
   [/\+(\d+) more/g, "+$1 ی تر"],
+  [/^Items$/g, "کەلوپەل"],
   ...MODELS.map((m) => [new RegExp(m, "g"), KU[m]]),
 ];
 
@@ -428,12 +577,12 @@ export function tr(s) {
 }
 function trCore(core) {
   if (Object.prototype.hasOwnProperty.call(KU, core)) return KU[core];
-  for (const [re, fn] of PATTERNS) { const m = core.match(re); if (m) return fn(m); }
+  for (const [re, fn] of PATTERNS) { const m = core.match(re); if (m) { const r = fn(m); if (r != null) return r; } }
   if (core.includes(" · ")) return core.split(" · ").map((p) => (Object.prototype.hasOwnProperty.call(KU, p) ? KU[p] : trSeg(p))).join(" · ");
   return trSeg(core);
 }
 function trSeg(p) {
-  for (const [re, fn] of PATTERNS) { const m = p.match(re); if (m) return fn(m); }
+  for (const [re, fn] of PATTERNS) { const m = p.match(re); if (m) { const r = fn(m); if (r != null) return r; } }
   let out = p;
   for (const [re, rep] of SUBS) out = out.replace(re, rep);
   return out;
@@ -445,18 +594,22 @@ export function kuDate(y, m, d, weekday) { return `${WEEKDAYS[weekday]} ${d} ی 
 /* ---------------- DOM translation ---------------- */
 const SKIP = new Set(["SCRIPT", "STYLE", "TEXTAREA", "IFRAME", "CODE"]);
 const ATTRS = ["placeholder", "aria-label", "title", "alt"];
+function trAttrs(el) {
+  for (const a of ATTRS) if (el.hasAttribute?.(a)) { const v = el.getAttribute(a), t = tr(v); if (t !== v) el.setAttribute(a, t); }
+}
 function translateTree(root) {
   if (root.nodeType === 3) { translateText(root); return; }
-  if (root.nodeType !== 1 || SKIP.has(root.nodeName) || root.closest?.("[data-no-tr]")) return;
-  for (const a of ATTRS) if (root.hasAttribute?.(a)) { const v = root.getAttribute(a), t = tr(v); if (t !== v) root.setAttribute(a, t); }
+  if (root.nodeType !== 1 || SKIP.has(root.nodeName) && root.nodeName !== "TEXTAREA" || root.closest?.("[data-no-tr]")) return;
+  trAttrs(root);
+  if (root.nodeName === "TEXTAREA") return;
+  root.querySelectorAll?.("textarea").forEach(trAttrs);
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, {
     acceptNode: (n) => (n.nodeType === 1 && (SKIP.has(n.nodeName) || n.hasAttribute("data-no-tr")) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT),
   });
-  root.querySelectorAll?.("textarea").forEach((t) => { for (const a of ATTRS) if (t.hasAttribute(a)) { const v = t.getAttribute(a), x = tr(v); if (x !== v) t.setAttribute(a, x); } });
   let n;
   while ((n = walker.nextNode())) {
     if (n.nodeType === 3) translateText(n);
-    else for (const a of ATTRS) if (n.hasAttribute(a)) { const v = n.getAttribute(a), t = tr(v); if (t !== v) n.setAttribute(a, t); }
+    else trAttrs(n);
   }
 }
 function translateText(node) {
@@ -489,7 +642,7 @@ if (IS_KU) {
     new MutationObserver((list) => {
       for (const m of list) {
         if (m.type === "characterData") translateText(m.target);
-        else if (m.type === "attributes") translateTree(m.target);
+        else if (m.type === "attributes") trAttrs(m.target);
         else m.addedNodes.forEach(translateTree);
       }
     }).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS });

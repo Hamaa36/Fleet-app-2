@@ -38,23 +38,29 @@ Deno.serve(async (req) => {
   const payload = await req.json();
   const job = payload.record?.data;
   const jobId = payload.record?.id;
-  if (!job?.event || !job?.request_id) return new Response("Ignored", { status: 200 });
+  if (!job?.event) return new Response("Ignored", { status: 200 });
 
   const load = async (table: string, id: string) => (await db.from(table).select("data").eq("id", id).maybeSingle()).data?.data ?? null;
   try {
-    const request = await load("trip_requests", job.request_id);
-    if (!request) throw new Error("Request not found");
     const users = ((await db.from("users").select("data")).data ?? []).map((r: any) => r.data);
     const byId = (id?: string) => users.find((u: any) => u.id === id) ?? null;
     const admins = users.filter((u: any) => u.role === "admin" && u.active !== false && u.email);
-    const requesterEmail = request.is_guest ? request.guest_email : byId(request.requester_id)?.email;
+    let emails: { to: string; subject: string; html: string }[] = [];
 
-    const emails = buildEmails(job.event, {
-      request, admins, requesterEmail,
-      driver: byId(request.assigned_driver_id),
-      previousDriver: byId(job.previous_driver_id),
-      appUrl: env("APP_URL"),
-    });
+    if (job.event === "vehicle_issue") {
+      const issues = (await Promise.all((job.issue_ids ?? []).map((id: string) => load("vehicle_issues", id)))).filter(Boolean);
+      emails = buildEmails("vehicle_issue", { issues, admins, appUrl: env("APP_URL") });
+    } else {
+      const request = await load("trip_requests", job.request_id);
+      if (!request) throw new Error("Request not found");
+      const requesterEmail = request.is_guest ? request.guest_email : byId(request.requester_id)?.email;
+      emails = buildEmails(job.event, {
+        request, admins, requesterEmail,
+        driver: byId(request.assigned_driver_id),
+        previousDriver: byId(job.previous_driver_id),
+        appUrl: env("APP_URL"),
+      });
+    }
     const token = await graphToken();
     for (const m of emails) await sendMail(token, m.to, m.subject, m.html);
     await db.from("email_outbox").update({ data: { ...job, status: "sent", sent_to: emails.map((m) => m.to), sent_at: new Date().toISOString() } }).eq("id", jobId);
