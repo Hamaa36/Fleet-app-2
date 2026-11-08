@@ -1,4 +1,0 @@
-# Never publish employee data
-*.csv
-*.xlsx
-.env
