@@ -1,0 +1,7 @@
+{
+  "routes": [
+    { "route": "/supabase/functions/_shared/*", "allowedRoles": ["anonymous"] },
+    { "route": "/supabase/*", "statusCode": 404 }
+  ],
+  "globalHeaders": { "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin", "X-Frame-Options": "DENY" }
+}
